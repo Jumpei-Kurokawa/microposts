@@ -16,13 +16,15 @@ class CreateFavoriteTable extends Migration
         Schema::create('favorite', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned()->index();
-            $table->integer('follow_id')->unsigned()->index();
-            $table->integer('favorite')->unsigned()->index();
+            $table->integer('favorite_id')->unsigned()->index();
             $table->timestamps();
             
             // Foreign key constraint
             $table->foreign('user_id')->references('id')->on('users');
-    
+            $table->foreign('favorite_id')->references('id')->on('microposts')->onDelete('cascade');
+
+            // Do not allow duplication of combination of user_id and follow_id
+            $table->unique(['user_id', 'favorite_id']);
         });
     }
 
